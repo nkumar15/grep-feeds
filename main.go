@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "github.com/nkumar15/grep-feeds/matchers"
 	"github.com/nkumar15/grep-feeds/search"
 	"log"
 	"os"

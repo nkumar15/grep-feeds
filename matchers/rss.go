@@ -2,18 +2,22 @@ package matcher
 
 import (
 	"encoding/xml"
+	"errors"
+	"fmt"
 	"github.com/nkumar15/grep-feeds/search"
-	"time"
+	"log"
+	"net/http"
+	"regexp"
 )
 
 type item struct {
-	XMLName     xml.Name  `xml:"item"`
-	Title       string    `xml:"title"`
-	Description string    `xml:"description"`
-	PubDate     time.Time `xml:"pubDate"`
-	Link        string    `xml:"link"`
-	Guid        string    `xml:"guid"`
-	Content     string    `xml:"content:encoded"`
+	XMLName     xml.Name `xml:"item"`
+	Title       string   `xml:"title"`
+	Description string   `xml:"description"`
+	PubDate     string   `xml:"pubDate"`
+	Link        string   `xml:"link"`
+	Guid        string   `xml:"guid"`
+	Content     string   `xml:"content:encoded"`
 }
 
 type image struct {
@@ -24,16 +28,16 @@ type image struct {
 }
 
 type channel struct {
-	XMLName       xml.Name  `xml:"channel"`
-	Title         string    `xml:"title"`
-	ink           string    `xml:"link"`
-	Description   string    `xml:"description"`
-	Language      string    `xml:"language"`
-	Copyright     string    `xml:"copyright"`
-	Generator     string    `xml:"generator"`
-	LastBuildDate time.Time `xml:"lastBuildDate"`
-	Image         image     `xml:"image"`
-	Items         []item    `xml:"item"`
+	XMLName       xml.Name `xml:"channel"`
+	Title         string   `xml:"title"`
+	Link          string   `xml:"link"`
+	Description   string   `xml:"description"`
+	Language      string   `xml:"language"`
+	Copyright     string   `xml:"copyright"`
+	Generator     string   `xml:"generator"`
+	LastBuildDate string   `xml:"lastBuildDate"`
+	Image         image    `xml:"image"`
+	Items         []item   `xml:"item"`
 }
 
 type rssDocument struct {
@@ -62,7 +66,7 @@ func (m rssMatcher) Search(feed *search.Feed, searchTerm string) ([]*search.Resu
 		return nil, err
 	}
 
-	for _, channelItem := range document.Channel.Item {
+	for _, channelItem := range document.Channel.Items {
 		// Check the title for the search term.
 		matched, err := regexp.MatchString(searchTerm, channelItem.Title)
 		if err != nil {
