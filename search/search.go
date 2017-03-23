@@ -21,7 +21,7 @@ func Register(feedType string, matcher Matcher) {
 // Run performs the search logic.
 func Run(searchTerm string) {
 	// Retrieve the list of feeds to search through.
-	feeds, err := RetrieveFeeds()
+	feeds, err := LoadFeedsInfo()
 	if err != nil {
 		log.Fatal(err)
 	}

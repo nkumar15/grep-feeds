@@ -15,7 +15,7 @@ type Feed struct {
 }
 
 func LoadFeedsInfo() ([]*Feed, error) {
-	file, err = os.open(dataFile)
+	file, err := os.Open(dataFile)
 	if err != nil {
 		return nil, err
 	}
