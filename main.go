@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	_ "github.com/nkumar15/grep-feeds/matchers"
 	"github.com/nkumar15/grep-feeds/search"
 	"log"
@@ -16,5 +17,7 @@ func init() {
 // main is the entry point for the program.
 func main() {
 	// Perform the search for the specified term.
-	search.Run("president")
+	searchTerm := flag.String("search", "India", "word to search over feeds.")
+	flag.Parse()
+	search.Run(*searchTerm)
 }
